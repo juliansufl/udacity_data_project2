@@ -1,4 +1,6 @@
+from calendar import c
 import json
+from nis import cat
 import plotly
 import pandas as pd
 
@@ -42,6 +44,11 @@ def index():
     # TODO: Below is an example - modify to extract data for your own visuals
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
+
+    # create a category plot
+    categories= df[df.columns[4:]]
+    categories_count = (categories.mean()*categories.shape[0].sort_values(ascending=False))
+    categories_name = list(categories_count.index)
     
     # create visuals
     # TODO: Below is an example - modify to create your own visuals
@@ -61,6 +68,23 @@ def index():
                 },
                 'xaxis': {
                     'title': "Genre"
+                }
+            }
+        },
+        {
+            'data':[
+                Bar(
+                    x=categories_name,
+                    y=categories_count
+                )
+            ],
+            'layout': {
+                'title': 'Distribution of Message Categories',
+                'yaxis': {
+                    'title': "Count"
+                },
+                'xaxis': {
+                    'title': "Categories"
                 }
             }
         }
